@@ -38,17 +38,31 @@ body {
 .cell__content:hover {
     cursor: pointer;
 }
-.cell__content:active {
-    cursor: wait;
-}
 .cell__cover {
     background-color: blanchedalmond;
     height: 100%;
     width: 100%;
     position: absolute;
-    transition: all 0.15s;
+    transition: .15s;
 }
 .cell__cover_opened {
-    transform: rotateY(90deg);
+    transform: scale(0, 1);
     transform-origin: left;
+}
+.cell__arrowone, .cell__arrowtwo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    
+}
+.cell__arrowone i {
+    color: red;
+    transform: rotate(-90deg);
+}
+.cell__arrowtwo i {
+    color: green;
+    /*transform: rotate(-45deg);*/
 }
