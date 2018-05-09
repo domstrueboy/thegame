@@ -11,7 +11,7 @@ body {
 .field {
     min-width: 480px;
     min-height: 480px;
-    background-color: gray;
+    background-color: lightblue;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -26,13 +26,29 @@ body {
 }
 .cell {
     flex: 1;
-    background-color: burlywood;
-    transition: all 0.25s;
+    transition: all 0.15s;
     padding: 1px;
-    border-radius: 15px;
 }
-.cell:hover {
-    /*background-color: coral;*/
+.cell__content {
+    background-color: coral;
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+.cell__content:hover {
+    cursor: pointer;
+}
+.cell__content:active {
+    cursor: wait;
+}
+.cell__cover {
+    background-color: blanchedalmond;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    transition: all 0.15s;
+}
+.cell__cover_opened {
     transform: rotateY(90deg);
     transform-origin: left;
 }

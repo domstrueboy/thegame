@@ -3,8 +3,8 @@
 const field = document.querySelector('.field');
          
 // Initial values:
-let numberOfRows    = 4,
-    numberOfColumns = 5;
+let numberOfRows    = 10,
+    numberOfColumns = 10;
 
 // Заполнение поля клетками
 for (let i = 0; i < numberOfRows; i++) {
@@ -15,12 +15,15 @@ for (let i = 0; i < numberOfRows; i++) {
         let cell = document.createElement("div");
         cell.classList.add('cell', `column${j}`);
         row.appendChild(cell);
+        
+            let cellContent = document.createElement("div");
+            cellContent.classList.add('cell__content');
+            cell.appendChild(cellContent);
 
-        //cell.style.height = cell.style.width;
-
-        let cellContent = document.createElement("div");
-        cellContent.classList.add('cell__content');
-        cell.appendChild(cellContent);
+                let cellCover = document.createElement("div");
+                cellCover.classList.add('cell__cover');
+                cellContent.appendChild(cellCover);
+                cellCover.addEventListener('click', e => e.target.classList.add('cell__cover_opened') );
     }
 }
 
