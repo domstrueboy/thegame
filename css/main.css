@@ -48,8 +48,9 @@ body {
 .cell__cover_opened {
     transform: scale(0, 1);
     transform-origin: left;
+    /*display: none;*/
 }
-.cell__arrowone, .cell__arrowtwo {
+.cell__arrowone, .cell__arrowtwo, .cell__bangone, .cell__bangtwo, .cell__bangthree {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -65,4 +66,19 @@ body {
 .cell__arrowtwo i {
     color: green;
     /*transform: rotate(-45deg);*/
+}
+.cell__bangone i {
+    color: red;
+    font-size: 2rem;
+    transform: rotate(-25deg);
+}
+.cell__bangtwo i {
+    color: yellow;
+    font-size: 1.8rem;
+    transform: rotate(-70deg);
+}
+.cell__bangthree i {
+    color: orange;
+    font-size: 1.5rem;
+    transform: rotate(-95deg);
 }

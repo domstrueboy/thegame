@@ -5,6 +5,7 @@ const field = document.querySelector('.field');
 // Initial values:
 let numberOfRows    = 15,
     numberOfColumns = 15;
+let bombs = 100;
 
 // Заполнение поля клетками
 for (let i = 0; i < numberOfRows; i++) {
@@ -19,85 +20,60 @@ for (let i = 0; i < numberOfRows; i++) {
             let cellContent = document.createElement("div");
             cellContent.classList.add('cell__content');
             cell.appendChild(cellContent);
-
-                let arrowOne = document.createElement("div");
-                arrowOne.classList.add('cell__arrowone');
-                arrowOne.innerHTML = `<i class="material-icons">trending_flat</i>`;
-                cellContent.appendChild(arrowOne);
-
-                let arrowTwo = document.createElement("div");
-                arrowTwo.classList.add('cell__arrowtwo');
-                arrowTwo.innerHTML = `<i class="material-icons">trending_flat</i>`;
-                cellContent.appendChild(arrowTwo);
-
-                let cellCover = document.createElement("div");
-                cellCover.classList.add('cell__cover');
-                cellContent.appendChild(cellCover);
-                cellCover.addEventListener('click', e => e.target.classList.add('cell__cover_opened') );
     }
 }
 
-//let x0, y0;
-//let x = 0, y = 0;
-//let card;
+do {
+    let randRow = getRandomInt(0, numberOfRows);
+    let randCol = getRandomInt(0, numberOfColumns);
 
-// Events:
-//items.forEach(item => {
-//    item.addEventListener('mousedown', down);
-//});
-//window.addEventListener('mousemove', move);
+    let cellContent = document.querySelector(`.row${randRow} > .column${randCol} > .cell__content`);
+    let cellAlreadyHasABomb = cellContent.children.length > 0;
 
-// Functions:
-/*function down(e) {
-    if (!e.target.matches('.item')) { return; }
-    e.preventDefault();
+    if ( !cellAlreadyHasABomb ) {
+        putABomb(cellContent);
+    }
 
-    isHandling = true;
-    x = 0, y = 0;
-    card = e.target;
-    x0 = card.offsetLeft; y0 = card.offsetTop;
-    let width = card.clientWidth;
+    bombs--;
+} while(bombs > 0);
 
-    e.target.style.opacity = 0.3;
+for (let i = 0; i < numberOfRows; i++) {
+    for (let j = 0; j < numberOfColumns; j++) {
 
-    shuttle.style.display = 'block';
-    shuttle.style.left = `${x0}px`;
-    shuttle.style.top = `${y0}px`;
-    shuttle.style.width = `${width}px`;
+        let cellContent = document.querySelector(`.row${i} > .column${j} > .cell__content`);
 
-    shuttle.addEventListener('mouseup', up);
-    shuttle.addEventListener('mouseleave', up);
-    console.log(e);
+        let cellCover = document.createElement("div");
+        cellCover.classList.add('cell__cover');
+        cellContent.appendChild(cellCover);
+        cellCover.addEventListener('click', e => e.target.classList.add('cell__cover_opened') );
+    }
 }
 
-function up(e) {
-    if (!e.target.matches('.item')) { return; }
-    e.preventDefault();
+function putABomb(node) {
+    const layers = ['one', 'two', 'three'];
 
-    isHandling = false;
-    shuttle.style.display = 'none';
-
-    if (e.x > document.body.clientWidth - colLast.clientWidth && x0 < colFirst.clientWidth) {
-        colFirst.removeChild(card);
-        ( e.relatedTarget === null ) ? colLast.appendChild(card) : colLast.insertBefore(card, e.relatedTarget);
+    for (let layer of layers) {
+        let bang = document.createElement('div');
+        bang.classList.add(`cell__bang${layer}`);
+        bang.innerHTML = '<i class="material-icons">grade</i>';
+        node.appendChild(bang);
     }
-    if (e.x < colFirst.clientWidth && x0 > document.body.clientWidth - colLast.clientWidth) {
-        colLast.removeChild(card);
-        ( e.relatedTarget === null ) ? colFirst.appendChild(card) : colFirst.insertBefore(card, e.relatedTarget);
-    }
-    
-    card.style.opacity = 1;
-
-    shuttle.removeEventListener('mouseup', up);
-    shuttle.removeEventListener('mouseleave', up);
-    console.log(e);
 }
 
-function move(e) {
-    if (!isHandling) { return; }
-    e.preventDefault();
-    
-    x += e.movementX; y += e.movementY;
-    shuttle.style.transform = `translate(${x}px, ${y}px) rotate(15deg)`;
-}*/
+function putAnArrow() {
+    let arrowOne = document.createElement("div");
+    arrowOne.classList.add('cell__arrowone');
+    arrowOne.innerHTML = `<i class="material-icons">trending_flat</i>`;
+    cellContent.appendChild(arrowOne);
+
+    let arrowTwo = document.createElement("div");
+    arrowTwo.classList.add('cell__arrowtwo');
+    arrowTwo.innerHTML = `<i class="material-icons">trending_flat</i>`;
+    cellContent.appendChild(arrowTwo);
+}
+
+function getRandomInt(min, max) { // Возвращает случайное целое число между min (включительно) и max (не включая max)
+    return Math.floor(Math.random() * (max - min)) + min;
+}
+
 })();
