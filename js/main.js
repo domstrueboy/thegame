@@ -47,6 +47,10 @@ do { // Размещение бомб
 for (let i = 0; i < numberOfRows; i++) {
     for (let j = 0; j < numberOfColumns; j++) {
 
+        if (i === centerRow && j === centerColumn) {
+            continue;
+        }
+
         let cellContent = document.querySelector(`.row${i} > .column${j} > .cell__content`);
 
         let cellCover = document.createElement("div");
@@ -55,6 +59,9 @@ for (let i = 0; i < numberOfRows; i++) {
         cellCover.addEventListener('click', step );
     }
 }
+
+let initialCell = document.querySelector(`.row${centerRow} > .column${centerColumn} > .cell__content`);
+putAnArrow(initialCell);
 
 /*document.querySelectorAll('cell__content') // то же, что предыдущий цикл, но в другом стиле, правда не работает, ну и ладно, потом разберусь
         .forEach(el => {
