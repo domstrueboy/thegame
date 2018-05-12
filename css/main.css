@@ -75,10 +75,8 @@ body {
 .cell__bangtwo i {
     color: yellow;
     font-size: 1.8rem;
-    transform: rotate(-70deg);
 }
 .cell__bangthree i {
     color: orange;
     font-size: 1.5rem;
-    transform: rotate(-95deg);
 }

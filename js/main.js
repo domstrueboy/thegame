@@ -35,7 +35,7 @@ do { // Размещение бомб
     }
 
     let cellContent = document.querySelector(`.row${randRow} > .column${randCol} > .cell__content`);
-    let cellAlreadyHasABomb = cellContent.children.length > 0;
+    let cellAlreadyHasABomb = cellContent.children.length > 0; // потом переделать через поиск класса
 
     if ( !cellAlreadyHasABomb ) {
         putABomb(cellContent);
@@ -47,7 +47,7 @@ do { // Размещение бомб
 for (let i = 0; i < numberOfRows; i++) {
     for (let j = 0; j < numberOfColumns; j++) {
 
-        if (i === centerRow && j === centerColumn) {
+        if (i === centerRow && j === centerColumn) { // Не закрываем центральное поле
             continue;
         }
 
@@ -60,19 +60,9 @@ for (let i = 0; i < numberOfRows; i++) {
     }
 }
 
+// Размещение стрелок на начальном поле
 let initialCell = document.querySelector(`.row${centerRow} > .column${centerColumn} > .cell__content`);
 putAnArrow(initialCell);
-
-/*document.querySelectorAll('cell__content') // то же, что предыдущий цикл, но в другом стиле, правда не работает, ну и ладно, потом разберусь
-        .forEach(el => {
-            console.log(el);
-            cellCover = document
-                        .createElement("div")
-                        .classList
-                        .add('cell__cover');
-            el.appendChild(cellCover);
-            cellCover.addEventListener('click', e => e.target.classList.add('cell__cover_opened') );
-        });*/
 
 function putABomb(node) {
     const layers = ['one', 'two', 'three'];
@@ -89,7 +79,7 @@ function step(e) {
     e.target.classList.add('cell__cover_opened');
     let cellContent = e.target.parentNode;
 
-    let cellAlreadyHasABomb = cellContent.children.length > 1;
+    let cellAlreadyHasABomb = cellContent.children.length > 1; // потом переделать через поиск класса
 
     if ( !cellAlreadyHasABomb ) {
         putAnArrow(cellContent);
@@ -104,12 +94,21 @@ function putAnArrow(node) {
     let arrowOne = document.createElement("div");
     arrowOne.classList.add('cell__arrowone');
     arrowOne.innerHTML = `<i class="material-icons">trending_flat</i>`;
+    let directionOne = getRandomInt(0, 4);
+    arrowOne.style.transform = `rotate(${directionOne*90}deg)`;
     node.appendChild(arrowOne);
 
     let arrowTwo = document.createElement("div");
     arrowTwo.classList.add('cell__arrowtwo');
     arrowTwo.innerHTML = `<i class="material-icons">trending_flat</i>`;
+    let directionTwo = getRandomInt(0, 4);
+    arrowTwo.style.transform = `rotate(${directionTwo*90}deg)`;
     node.appendChild(arrowTwo);
+}
+
+function getDirection(node) {
+    let directionOne = getRandomInt(0, 4);
+    arrowOne.style.transform = `rotate(${directionOne*90}deg)`;
 }
 
 function getRandomInt(min, max) { // Возвращает случайное целое число между min (включительно) и max (не включая max)
@@ -117,3 +116,15 @@ function getRandomInt(min, max) { // Возвращает случайное ц�
 }
 
 })();
+
+
+/*document.querySelectorAll('cell__content') // то же, что предыдущий цикл, но в другом стиле, правда не работает, ну и ладно, потом разберусь
+        .forEach(el => {
+            console.log(el);
+            cellCover = document
+                        .createElement("div")
+                        .classList
+                        .add('cell__cover');
+            el.appendChild(cellCover);
+            cellCover.addEventListener('click', e => e.target.classList.add('cell__cover_opened') );
+        });*/
