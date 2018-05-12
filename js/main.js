@@ -5,7 +5,10 @@ const field = document.querySelector('.field');
 // Initial values:
 let numberOfRows    = 15,
     numberOfColumns = 15;
-let bombs = 100;
+let bombs = 10;
+
+let centerRow = Math.floor(numberOfRows/2),
+    centerColumn = Math.floor(numberOfColumns/2);
 
 // Заполнение поля клетками
 for (let i = 0; i < numberOfRows; i++) {
@@ -23,9 +26,13 @@ for (let i = 0; i < numberOfRows; i++) {
     }
 }
 
-do {
+do { // Размещение бомб
     let randRow = getRandomInt(0, numberOfRows);
     let randCol = getRandomInt(0, numberOfColumns);
+
+    if (randRow === centerRow && randCol === centerColumn) {
+        continue;
+    }
 
     let cellContent = document.querySelector(`.row${randRow} > .column${randCol} > .cell__content`);
     let cellAlreadyHasABomb = cellContent.children.length > 0;
@@ -45,9 +52,20 @@ for (let i = 0; i < numberOfRows; i++) {
         let cellCover = document.createElement("div");
         cellCover.classList.add('cell__cover');
         cellContent.appendChild(cellCover);
-        cellCover.addEventListener('click', e => e.target.classList.add('cell__cover_opened') );
+        cellCover.addEventListener('click', step );
     }
 }
+
+/*document.querySelectorAll('cell__content') // то же, что предыдущий цикл, но в другом стиле, правда не работает, ну и ладно, потом разберусь
+        .forEach(el => {
+            console.log(el);
+            cellCover = document
+                        .createElement("div")
+                        .classList
+                        .add('cell__cover');
+            el.appendChild(cellCover);
+            cellCover.addEventListener('click', e => e.target.classList.add('cell__cover_opened') );
+        });*/
 
 function putABomb(node) {
     const layers = ['one', 'two', 'three'];
@@ -60,16 +78,31 @@ function putABomb(node) {
     }
 }
 
-function putAnArrow() {
+function step(e) {
+    e.target.classList.add('cell__cover_opened');
+    let cellContent = e.target.parentNode;
+
+    let cellAlreadyHasABomb = cellContent.children.length > 1;
+
+    if ( !cellAlreadyHasABomb ) {
+        putAnArrow(cellContent);
+    }
+    else {
+        alert('Game over!');
+    }
+
+}
+
+function putAnArrow(node) {
     let arrowOne = document.createElement("div");
     arrowOne.classList.add('cell__arrowone');
     arrowOne.innerHTML = `<i class="material-icons">trending_flat</i>`;
-    cellContent.appendChild(arrowOne);
+    node.appendChild(arrowOne);
 
     let arrowTwo = document.createElement("div");
     arrowTwo.classList.add('cell__arrowtwo');
     arrowTwo.innerHTML = `<i class="material-icons">trending_flat</i>`;
-    cellContent.appendChild(arrowTwo);
+    node.appendChild(arrowTwo);
 }
 
 function getRandomInt(min, max) { // Возвращает случайное целое число между min (включительно) и max (не включая max)
