@@ -50,7 +50,7 @@ body {
     transform-origin: left;
     /*display: none;*/
 }
-.cell__arrowone, .cell__arrowtwo, .cell__bangone, .cell__bangtwo, .cell__bangthree {
+.cell__arrowred, .cell__arrowgreen, .cell__bangone, .cell__bangtwo, .cell__bangthree {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -59,13 +59,11 @@ body {
     position: absolute;
     
 }
-.cell__arrowone i {
+.cell__arrowred i {
     color: red;
-    transform: rotate(-90deg);
 }
-.cell__arrowtwo i {
+.cell__arrowgreen i {
     color: green;
-    /*transform: rotate(-45deg);*/
 }
 .cell__bangone i {
     color: red;
@@ -79,4 +77,10 @@ body {
 .cell__bangthree i {
     color: orange;
     font-size: 1.5rem;
+}
+.cell__arrowgreen i {
+    color: green;
+}
+.cell__flag {
+    color: red;
 }
