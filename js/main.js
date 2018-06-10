@@ -1,13 +1,22 @@
 'use strict';
-(function (){
-// DOM-nodes:
+(function game(){
+
 const field = document.querySelector('.field');
          
 // Initial values:
-let numberOfRows    = 11,
-    numberOfColumns = 11;
-let bombs = 10;
+let numberOfRows    = 15,
+    numberOfColumns = 15;
+let bombs = 50;
+const bombsOutput = document.querySelector('.bombs__number');
+bombsOutput.innerHTML = bombs + ''; 
+
 let treasures = 0;
+const treasuresOutput = document.querySelector('.treasures__number');
+treasuresOutput.innerHTML = treasures + '';
+
+let freeCells = numberOfRows*numberOfColumns - bombs;
+
+
 
 let centerRow = Math.floor(numberOfRows/2),
     centerColumn = Math.floor(numberOfColumns/2);
@@ -31,6 +40,7 @@ for (let i = 0; i < numberOfRows; i++) {
     }
 }
 
+let temp_bombs = bombs;
 do { // Размещение бомб
     let randRow = getRandomInt(0, numberOfRows);
     let randCol = getRandomInt(0, numberOfColumns);
@@ -46,8 +56,8 @@ do { // Размещение бомб
         putABomb(cellContent);
     }
 
-    bombs--;
-} while(bombs > 0);
+    temp_bombs--;
+} while(temp_bombs > 0);
 
 for (let i = 0; i < numberOfRows; i++) {
     for (let j = 0; j < numberOfColumns; j++) {
@@ -85,11 +95,23 @@ function step(e) {
 
     if ( !cellAlreadyHasABomb ) {
         putArrows(cellContent);
+        freeCells--;
+        if (freeCells === 0) {
+            alert('ПОБЕДА!');
+            setTimeout(function(){
+                field.innerHTML = '';
+                game();
+            }, 3000);
+        }
     }
     else {
         const cells = document.querySelectorAll('.cell__cover');
         cells.forEach(cell => cell.classList.add('cell__cover_opened'));
-        alert('Game over!');
+        alert('БУУУМ!');
+        setTimeout(function(){
+            field.innerHTML = '';
+            game();
+        }, 1000);
     }
 }
 
@@ -99,11 +121,15 @@ function toggleAFlag(e) {
 
     if (cellContent.firstChild) {
         cellContent.removeChild(cellContent.firstChild);
+        bombs++;
+        bombsOutput.innerHTML = bombs + '';
     } else {
         let flag = document.createElement("div");
         flag.classList.add('cell__flag');
         flag.innerHTML = `<i class="material-icons">flag</i>`;   
-        cellContent.appendChild(flag);  
+        cellContent.appendChild(flag); 
+        bombs--;
+        bombsOutput.innerHTML = bombs + ''; 
     }
 }
 
@@ -113,6 +139,7 @@ function putATreasure(node) {
     treasure.classList.add('cell__treasure');
     node.appendChild(treasure);
     treasures++;
+    treasuresOutput.innerHTML = treasures + '';
 }
 
 function putArrows(node) {
@@ -152,7 +179,7 @@ function putArrows(node) {
     }
     
     trueArrow.style.transform = `rotate(-${trueDirection*90}deg)`;
-    node.appendChild(trueArrow);
+    
 
     // Теперь ложная стрелка
     const falseDirection = getRandomInt(0, 4); // Берём случайное направление
@@ -168,6 +195,16 @@ function putArrows(node) {
     }
     
     falseArrow.style.transform = `rotate(-${falseDirection*90}deg)`;
+
+    if (trueDirection === falseDirection) {
+        trueArrow.classList.add('cell__arrow_up');
+        falseArrow.classList.add('cell__arrow_down');
+    } else if (Math.abs(trueDirection - falseDirection) === 2) {
+        trueArrow.classList.add('cell__arrow_up');
+        falseArrow.classList.add('cell__arrow_up');
+    }
+
+    node.appendChild(trueArrow);
     node.appendChild(falseArrow);
 }
 

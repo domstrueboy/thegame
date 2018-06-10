@@ -1,16 +1,26 @@
-body {
-    margin: 0;
-    padding: 0;
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+* {
+  margin: 0;
+  border: 0;
+}
+body{
+  font-family: 'Roboto', Verdana, sans-serif;
+}
+.material-icons {
+    transform: scale(1.4);
 }
 .container {
     display: flex;
+    flex-direction: column;
     height: 100vh;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
 }
 .field {
     min-width: 480px;
     min-height: 480px;
+    width: 90vh;
+    height: 90vh;
     background-color: lightblue;
     display: flex;
     flex-direction: column;
@@ -83,4 +93,23 @@ body {
 }
 .cell__treasure i {
     color: gold;
+}
+.cell__arrow_up {
+    align-items: flex-start;
+}
+.cell__arrow_down {
+    align-items: flex-end;
+}
+.header, .footer {
+    align-self: stretch;
+    padding: 10px;
+    text-align: center;
+}
+.header {
+    display: flex;
+    justify-content: space-around;
+}
+.footer {
+    display: flex;
+    justify-content: space-around;
 }

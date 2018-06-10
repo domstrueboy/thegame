@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <title>The Super Ultra Fusion Power Stealth Game</title>
+    <title>The Game</title>
     <meta charset="utf-8">
     <link href="css/main.css" rel="stylesheet">
     <link href="http://htmlbook.ru/favicon.ico" rel="shortcut icon"p>
@@ -9,7 +9,27 @@
 </head>
 <body>
 <div class="container">
-    <div class="field"></div>
+    <header class="header">
+        <label for="field-size">
+            Размеры поля:
+            <select name="field-size">
+                <option value="10">10х10</option> 
+                <option value="15" selected>15х15</option>
+                <option value="20">20х20</option>
+            </select>
+        </label>
+    </header>
+    <section class="field"></section>
+    <footer class="footer">
+        <section class="bombs">
+            <strong class="bombs__title">Осталось бомб:</strong>
+            <span class="bombs__number"></span>
+        </section>
+        <section class="treasures">
+            <strong class="treasures__title">Собрано сокровищ:</strong>
+            <span class="treasures__number"></span>
+        </section>
+    </footer>
 </div>
 
 <script src="js/main.js"></script>
