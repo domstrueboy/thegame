@@ -1,11 +1,13 @@
+'use strict';
 (function (){
 // DOM-nodes:
 const field = document.querySelector('.field');
          
 // Initial values:
-let numberOfRows    = 15,
-    numberOfColumns = 15;
-let bombs = 20;
+let numberOfRows    = 11,
+    numberOfColumns = 11;
+let bombs = 10;
+let treasures = 0;
 
 let centerRow = Math.floor(numberOfRows/2),
     centerColumn = Math.floor(numberOfColumns/2);
@@ -61,7 +63,7 @@ for (let i = 0; i < numberOfRows; i++) {
 // Размещение стрелки на центральном поле
 let initialCell = document.querySelector(`.row${centerRow} > .column${centerColumn} > .cell__content`);
 initialCell.firstChild.classList.add('cell__cover_opened');
-putAnArrow(initialCell);
+putArrows(initialCell);
 
 function putABomb(node) {
     const layers = ['one', 'two', 'three'];
@@ -82,7 +84,7 @@ function step(e) {
     let cellAlreadyHasABomb = cellContent.children.length > 1; // потом переделать через поиск класса
 
     if ( !cellAlreadyHasABomb ) {
-        putAnArrow(cellContent);
+        putArrows(cellContent);
     }
     else {
         const cells = document.querySelectorAll('.cell__cover');
@@ -105,90 +107,61 @@ function toggleAFlag(e) {
     }
 }
 
-function putAnArrow(node) {
-    getDirections(node);
+function putATreasure(node) {
+    const treasure = document.createElement("div");
+    treasure.innerHTML = `<i class="material-icons">attach_money</i>`;
+    treasure.classList.add('cell__treasure');
+    node.appendChild(treasure);
+    treasures++;
 }
 
-function getDirections(node) {
+function putArrows(node) {
     // Создаем ссылки на клетки справа, сверху, слева, снизу от выбранной
     const rightWay = document.querySelector(`div[data-row="${ +node.dataset.row }"][data-col="${ +node.dataset.col + 1 }"]`);
     const topWay = document.querySelector(`div[data-row="${ +node.dataset.row - 1 }"][data-col="${ +node.dataset.col }"]`);
     const leftWay = document.querySelector(`div[data-row="${ +node.dataset.row }"][data-col="${ +node.dataset.col - 1 }"]`);
     const bottomWay = document.querySelector(`div[data-row="${ +node.dataset.row + 1 }"][data-col="${ +node.dataset.col }"]`);
-
-    // Если пути по этой ссылке нет (граница поля или уже открыто), то присваиваем null этому направлению в map,
-    // затем в reduce создаём массив, содержащий коды возможных направлений, от 0 до 3
-    let allowedWays = [rightWay, topWay, leftWay, bottomWay]
-                      //.map( el => (el && el.firstChild.matches(`.cell__cover_opened`)) ? null : el)
-                      .reduce( (acc, currentValue, currentIndex) => {
-                          if (currentValue) {
-                               acc.push(currentIndex);
-                              return acc;
-                          } else {
-                              return acc;
-                          }
-                      }, []);
-
-    const trueDirection = allowedWays.length > 0 ? allowedWays[getRandomInt(0, allowedWays.length)] : null; //Генерируем код случайного направления из возможных
-    if (trueDirection === null) { return } // Если нет свободного пути, то пока просто не размещаем стрелок
+    const crossField = [rightWay, topWay, leftWay, bottomWay];
     
-    let destinationCell;   
-    if (trueDirection === 0) {
-        destinationCell = rightWay;
-    } else if (trueDirection === 1) {
-        destinationCell = topWay;
-    } else if (trueDirection === 2) {
-        destinationCell = leftWay;
-    } else if (trueDirection === 3) {
-        destinationCell = bottomWay;
+    if (crossField // Проверка на тупик (можно ли разместить сокровище)
+        .map( el => (el && el.firstChild.matches(`.cell__cover_opened`)) ? null : el)
+        .reduce( (acc, currentValue, currentIndex) => {
+            if (currentValue) {
+                acc.push(currentIndex);
+                return acc;
+            } else {
+                return acc;
+            }
+        }, []).length > 0) {
+        getRandomInt(0, 4)
+    } else {
+        putATreasure(node);
+        return
     }
+
+    const trueDirection = getRandomInt(0, 4); // Берём случайное направление
+    const trueDestinationCell = crossField[trueDirection]; 
 
     const trueArrow = document.createElement("div");
     trueArrow.innerHTML = `<i class="material-icons">trending_flat</i>`;
 
-    if (destinationCell.dataset.bomb === 'yes') {
+    if (trueDestinationCell && trueDestinationCell.dataset.bomb === 'yes') {
         trueArrow.classList.add('cell__arrowred');
-        var alreadyPut = 'red';
     } else {
         trueArrow.classList.add('cell__arrowgreen');
-        var alreadyPut = 'green';
     }
     
     trueArrow.style.transform = `rotate(-${trueDirection*90}deg)`;
     node.appendChild(trueArrow);
 
     // Теперь ложная стрелка
-    const allowedDirections = [(trueDirection > 0) ? trueDirection - 1 : 3,
-                               (trueDirection < 3) ? trueDirection + 1 : 0];
-    allowedWays = [ [rightWay, topWay, leftWay, bottomWay][allowedDirections[0]],
-                    [rightWay, topWay, leftWay, bottomWay][allowedDirections[1]] ]
-                  //.map (el => (el && el.firstChild.matches(`.cell__cover_opened`)) ? null : el)
-                  .reduce ( (acc, currentValue, currentIndex) => {
-                    if (currentValue) {
-                        acc.push(allowedDirections[currentIndex]);
-                        return acc;
-                    } else {
-                        return acc;
-                    }
-                  }, []);
-
-    const falseDirection = allowedWays.length > 0 ? allowedWays[getRandomInt(0, allowedWays.length)] : null; //Генерируем код случайного направления из возможных
-    if (falseDirection === null) { return } // Если нет свободного пути, то не размещаем стрелку
-
-    if (falseDirection === 0) {
-        destinationCell = rightWay;
-    } else if (falseDirection === 1) {
-        destinationCell = topWay;
-    } else if (falseDirection === 2) {
-        destinationCell = leftWay;
-    } else if (falseDirection === 3) {
-        destinationCell = bottomWay;
-    }
+    const falseDirection = getRandomInt(0, 4); // Берём случайное направление
+    const falseDestinationCell = crossField[falseDirection];
 
     const falseArrow = document.createElement("div");
     falseArrow.innerHTML = `<i class="material-icons">trending_flat</i>`;
 
-    if (destinationCell.dataset.bomb === 'yes') {
+    if (falseDestinationCell && falseDestinationCell.dataset.bomb === 'yes') {
         falseArrow.classList.add('cell__arrowgreen');
     } else {
         falseArrow.classList.add('cell__arrowred');

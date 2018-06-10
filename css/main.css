@@ -50,7 +50,7 @@ body {
     transform-origin: left;
     /*display: none;*/
 }
-.cell__arrowred, .cell__arrowgreen, .cell__bangone, .cell__bangtwo, .cell__bangthree {
+.cell__arrowred, .cell__arrowgreen, .cell__bangone, .cell__bangtwo, .cell__bangthree, .cell__flag, .cell__treasure {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -78,9 +78,9 @@ body {
     color: orange;
     font-size: 1.5rem;
 }
-.cell__arrowgreen i {
-    color: green;
-}
-.cell__flag {
+.cell__flag i {
     color: red;
+}
+.cell__treasure i {
+    color: gold;
 }
