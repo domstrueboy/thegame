@@ -119,7 +119,7 @@ function getDirections(node) {
     // Если пути по этой ссылке нет (граница поля или уже открыто), то присваиваем null этому направлению в map,
     // затем в reduce создаём массив, содержащий коды возможных направлений, от 0 до 3
     let allowedWays = [rightWay, topWay, leftWay, bottomWay]
-                      .map( el => (el && el.firstChild.matches(`.cell__cover_opened`)) ? null : el)
+                      //.map( el => (el && el.firstChild.matches(`.cell__cover_opened`)) ? null : el)
                       .reduce( (acc, currentValue, currentIndex) => {
                           if (currentValue) {
                                acc.push(currentIndex);
@@ -162,7 +162,7 @@ function getDirections(node) {
                                (trueDirection < 3) ? trueDirection + 1 : 0];
     allowedWays = [ [rightWay, topWay, leftWay, bottomWay][allowedDirections[0]],
                     [rightWay, topWay, leftWay, bottomWay][allowedDirections[1]] ]
-                  .map (el => (el && el.firstChild.matches(`.cell__cover_opened`)) ? null : el)
+                  //.map (el => (el && el.firstChild.matches(`.cell__cover_opened`)) ? null : el)
                   .reduce ( (acc, currentValue, currentIndex) => {
                     if (currentValue) {
                         acc.push(allowedDirections[currentIndex]);
